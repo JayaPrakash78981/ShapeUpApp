@@ -1,0 +1,229 @@
+/* --- Global Styles --- */
+body {
+  /* Use a clean, modern font stack */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #121212; /* Dark background to match theme */
+  color: #ffffff; /* White text for dark theme */
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* --- Header / Navbar --- */
+.navbar-custom {
+  transition: background-color 0.3s ease-in-out;
+  background-color: #1e1e1e !important; /* Dark background */
+  border-bottom: 1px solid #333;
+}
+
+/* This class is added by our new Header.js when you scroll */
+.navbar-scrolled-dark {
+  background-color: #1e1e1e !important; /* Keep dark background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark theme navbar scrolled style */
+.navbar-scrolled-dark {
+  background-color: #1e1e1e !important; /* Dark background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid #333;
+}
+
+/* --- Hero Banner Section --- */
+.hero-banner {
+  position: relative;
+  height: 70vh; /* Takes 70% of the viewport height */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* Remove the default container padding */
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+   /* Pulls it up behind the header */
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* We are using the illustration image from your HomeContent.js */
+  background-image: url('https://landkit.goodthemes.co/assets/img/illustrations/illustration-2.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
+/* This adds the dark overlay so text is readable */
+.hero-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3; /* Ensures content is on top of the overlay */
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+.hero-button {
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* --- Home Content Section --- */
+.home-content-section {
+  padding: 4rem 0;
+  background-color: #1e1e1e; /* Dark background for this section */
+}
+
+.section-title {
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #ffffff; /* White text */
+}
+
+.section-subtitle {
+  font-size: 1.15rem;
+  color: #b0b0b0; /* Light gray text */
+  margin-bottom: 3rem;
+}
+
+.feature-card {
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border-radius: 0.5rem; /* Softer corners */
+  background-color: #1e1e1e; /* Dark background */
+  border: 1px solid #333; /* Subtle border */
+}
+
+.feature-card:hover {
+  transform: translateY(-5px); /* Lifts the card on hover */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.final-cta-section {
+  padding: 4rem 0;
+  background-color: #1e1e1e; /* Dark background */
+}
+/* === ADD THIS TO THE BOTTOM OF YOUR App.css FILE === */
+
+/* --- Professional Page Container (Fixes "lot of white space") --- */
+.page-container {
+  /* Creates space for the sticky header */
+  padding-bottom: 4rem;
+  min-height: 90vh; /* Ensures footer is pushed down */
+  background-color: #1e1e1e; /* Dark background for pages */
+}
+
+/* --- Professional Form Container (For Login, Register, BMR, etc.) --- */
+.form-container-pro {
+  background-color: #1e1e1e; /* Dark background for forms */
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  padding: 2.5rem;
+  max-width: 500px; /* Constrains form width */
+  margin: 0 auto; /* Centers the form */
+  border: 1px solid #333; /* Subtle border */
+}
+
+.form-container-pro h1,
+.form-container-pro h2 {
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ffffff; /* White heading color for dark theme */
+}
+
+/* --- Professional Feature Card (For Features Page) --- */
+.feature-card-pro {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  text-align: center;
+  padding: 2rem;
+  height: 100%; /* Makes all cards in a row the same height */
+  background-color: #1e1e1e; /* Dark background for cards */
+  border: 1px solid #333; /* Subtle border */
+}
+
+.feature-card-pro:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.feature-icon {
+  font-size: 3rem; /* Big icon */
+  color: #90caf9; /* Light blue from theme */
+  margin-bottom: 1.5rem;
+}
+
+.feature-card-pro .card-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #ffffff; /* White text */
+}
+
+/* --- Professional Footer --- */
+.footer-pro {
+  background-color: #212529; /* Dark background */
+  color: #adb5bd; /* Light gray text */
+  padding: 3rem 0;
+  /* Remove the default container padding */
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.footer-pro .nav-link {
+  color: #ced4da;
+  padding: 0.25rem 0;
+}
+
+.footer-pro .nav-link:hover {
+  color: #ffffff;
+}
+
+.footer-pro-brand {
+  width: 100px;
+  filter: brightness(0) invert(1); /* Makes your logo white */
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.footer-pro-copyright {
+  color: #6c757d; /* Darker gray for copyright */
+  font-size: 0.9rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #343a40; /* Subtle separator line */
+}
+
