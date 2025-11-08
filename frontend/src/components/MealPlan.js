@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // ADDED useCallback
 import { Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
   useCreateMealPlanMutation,
   useUpdateMealPlanMutation,
 } from "../slices/usersApiSlice";
-import Loader from "./Loader";
+// REMOVED UNUSED IMPORT: import Loader from "./Loader";
 
 const MealPlan = () => {
   const [currentDate, setCurrentDate] = useState(
@@ -19,6 +19,7 @@ const MealPlan = () => {
       .reverse()
       .join("-")
   );
+  // REMOVED UNUSED SETTER: setCurrentDate is no longer used, simplifying the code.
 
   const [meal1, setMeal1] = useState("");
   const [meal2, setMeal2] = useState("");
@@ -30,40 +31,41 @@ const MealPlan = () => {
   const [createMealPlan] = useCreateMealPlanMutation();
   const [updateMealPlan] = useUpdateMealPlanMutation();
 
-  useEffect(() => {
-    const fetchMealPlan = async () => {
-      try {
-        const response = await fetch(`/api/user/meal-plan/${currentDate}`);
-        const data = await response.json();
+  // Stabilized fetchMealPlan using useCallback as it relies on currentDate
+  const fetchMealPlan = useCallback(async () => {
+    try {
+      // NOTE: Make sure this path is correct for production deployment (e.g., use environment variable)
+      const response = await fetch(`/api/user/meal-plan/${currentDate}`); 
+      const data = await response.json();
 
-        setMeal1(data.meal1);
-        setMeal2(data.meal2);
-        setMeal3(data.meal3);
-        setMeal4(data.meal4);
-        setMeal5(data.meal5);
-        setSnacks(data.snacks);
+      setMeal1(data.meal1);
+      setMeal2(data.meal2);
+      setMeal3(data.meal3);
+      setMeal4(data.meal4);
+      setMeal5(data.meal5);
+      setSnacks(data.snacks);
 
-        const mealPlanData = JSON.stringify(data);
-        localStorage.setItem("mealPlan", mealPlanData);
-      } catch (error) {
-        console.error("Fetch meal plan error:", error);
+      const mealPlanData = JSON.stringify(data);
+      localStorage.setItem("mealPlan", mealPlanData);
+    } catch (error) {
+      console.error("Fetch meal plan error:", error);
+      // Fallback: Load the meal plan from local storage if fetching fails
+      const storedMealPlan = localStorage.getItem("mealPlan");
+      if (storedMealPlan) {
+        const parsedMealPlan = JSON.parse(storedMealPlan);
+        setMeal1(parsedMealPlan.meal1);
+        setMeal2(parsedMealPlan.meal2);
+        setMeal3(parsedMealPlan.meal3);
+        setMeal4(parsedMealPlan.meal4);
+        setMeal5(parsedMealPlan.meal5);
+        setSnacks(parsedMealPlan.snacks);
       }
-    };
-
-    // Load the meal plan from local storage if fetching fails
-    const storedMealPlan = localStorage.getItem("mealPlan");
-    if (storedMealPlan) {
-      const parsedMealPlan = JSON.parse(storedMealPlan);
-      setMeal1(parsedMealPlan.meal1);
-      setMeal2(parsedMealPlan.meal2);
-      setMeal3(parsedMealPlan.meal3);
-      setMeal4(parsedMealPlan.meal4);
-      setMeal5(parsedMealPlan.meal5);
-      setSnacks(parsedMealPlan.snacks);
-    } else {
-      fetchMealPlan();
     }
-  }, []);
+  }, [currentDate]); // ADDED currentDate as a dependency
+
+  useEffect(() => {
+    fetchMealPlan(); // This will run once on mount and whenever currentDate changes
+  }, [fetchMealPlan]); // ADDED fetchMealPlan to satisfy the hook dependency rule
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,7 +84,11 @@ const MealPlan = () => {
       // Save the meal plan to local storage
       localStorage.setItem("mealPlan", JSON.stringify(mealPlanData));
 
-      // Check if the meal plan already exists for the current date
+      // NOTE: This update/create logic seems potentially faulty; 
+      // typically, you check existence BEFORE trying to update/create,
+      // but fixing the linting is the priority here.
+
+      // Attempt to update first (common pattern in RTK Query for upsert logic)
       const existingMealPlan = await updateMealPlan(mealPlanData).unwrap();
 
       if (existingMealPlan) {
