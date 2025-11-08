@@ -18,7 +18,7 @@ const UpdateDietProfile = () => {
 
   const [calories, setCalories] = useState(0);
   const [protein, setProtein] = useState(0);
-  const [fat, setFat] = setFat] = useState(0);
+  const [fat, setFat] = useState(0); // FIX: Corrected syntax from setFat] = setFat] = useState(0)
   const [carbs, setCarbs] = useState(0);
 
   useEffect(() => {
@@ -118,8 +118,7 @@ const UpdateDietProfile = () => {
           goal,
         };
 
-        // FIX: Removed 'const response =' to fix the 'unused variable' error
-        await updateStatus(updatedProfile).unwrap(); 
+        await updateStatus(updatedProfile).unwrap();
 
         toast.success("Diet Profile Updated!");
 
