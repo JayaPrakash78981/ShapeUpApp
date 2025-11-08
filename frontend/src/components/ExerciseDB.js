@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // ADDED useCallback
 import axios from "axios";
 import {
   Box,
@@ -45,13 +45,9 @@ const ExercisePage = () => {
     setSelectedMuscle(e.target.value);
   };
 
-  useEffect(() => {
-    if (selectedMuscle) {
-      handleSearch();
-    }
-  }, [selectedMuscle]);
+  // --- RECTIFICATION START: Stabilize functions with useCallback ---
 
-  const fetchFallbackImage = async (bodyPart) => {
+  const fetchFallbackImage = useCallback(async (bodyPart) => {
     try {
       const options = {
         method: "GET",
@@ -69,9 +65,10 @@ const ExercisePage = () => {
       console.error(`Failed to fetch fallback image for ${bodyPart}:`, error);
     }
     return gymIcon;
-  };
+  }, []); // Empty dependency array as it uses no state/props
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
+    // Functions like setError, setLoading, etc., are stable and don't need to be in dependencies.
     if (!selectedMuscle) {
       setError("Please select a muscle group first.");
       return;
@@ -115,7 +112,15 @@ const ExercisePage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedMuscle, fetchFallbackImage]); // Dependencies: selectedMuscle and fetchFallbackImage
+
+  useEffect(() => {
+    if (selectedMuscle) {
+      handleSearch();
+    }
+  }, [selectedMuscle, handleSearch]); // ADDED handleSearch to satisfy the linter/hook rules
+
+  // --- RECTIFICATION END ---
 
   const indexOfLastExercise = currentPage * exercisesPerPage;
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
