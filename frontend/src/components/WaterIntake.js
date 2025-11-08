@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // ADDED useCallback
 import { Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useUpdateWaterIntakeMutation } from "../slices/usersApiSlice";
 import { Box } from "@mui/material";
 
 const WaterIntakeLog = () => {
-  const [currentDate, setCurrentDate] = useState(
+  // FIX 1: Removed unused setter 'setCurrentDate'
+  const [currentDate] = useState(
     new Date().toISOString().split("T")[0]
   );
 
@@ -14,21 +15,23 @@ const WaterIntakeLog = () => {
 
   const [updateWaterIntake] = useUpdateWaterIntakeMutation();
 
+  // Stabilizing the async function with useCallback
+  const fetchWaterIntake = useCallback(async () => {
+    try {
+      // 'currentDate' is used here, so it must be a dependency of this function.
+      const response = await fetch(`/api/users/water-intake/${currentDate}`);
+      const data = await response.json();
+
+      setTotalWater(data.litersDrank);
+
+      const waterIntakeData = JSON.stringify(data);
+      localStorage.setItem("waterIntake", waterIntakeData);
+    } catch (error) {
+      console.error("Fetch water intake error:", error);
+    }
+  }, [currentDate]); // ADDED currentDate as a dependency for the stable function
+
   useEffect(() => {
-    const fetchWaterIntake = async () => {
-      try {
-        const response = await fetch(`/api/users/water-intake/${currentDate}`);
-        const data = await response.json();
-
-        setTotalWater(data.litersDrank);
-
-        const waterIntakeData = JSON.stringify(data);
-        localStorage.setItem("waterIntake", waterIntakeData);
-      } catch (error) {
-        console.error("Fetch water intake error:", error);
-      }
-    };
-
     // Load the water intake from local storage
     const storedWaterIntake = localStorage.getItem("waterIntake");
     if (storedWaterIntake) {
@@ -37,7 +40,10 @@ const WaterIntakeLog = () => {
     } else {
       fetchWaterIntake();
     }
-  }, []);
+    // FIX 2: ADDED fetchWaterIntake to the dependency array. 
+    // fetchWaterIntake (a stable function via useCallback) depends on currentDate, 
+    // so the effect runs when currentDate (today) changes.
+  }, [fetchWaterIntake]); 
 
   const handleChange = (event) => {
     const { value } = event.target;
