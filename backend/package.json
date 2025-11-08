@@ -5,10 +5,10 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "server": "nodemon app.js",
+    "start": "nodemon app.js",  <-- CHANGED: Now uses nodemon for local dev
+    "server": "node app.js",    <-- CHANGED: Now uses node for production
     "client": "npm run start --prefix ../frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run start\" \"npm run client\"", <-- UPDATED to use "start"
     "test": "jest",
     "vercel-build": "echo hello"
   },
